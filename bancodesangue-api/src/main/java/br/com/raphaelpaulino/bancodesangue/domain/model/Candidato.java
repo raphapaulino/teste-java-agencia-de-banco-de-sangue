@@ -1,28 +1,78 @@
-package br.com.raphaelpaulino.bancodesangue.model;
+package br.com.raphaelpaulino.bancodesangue.domain.model;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "candidato")
 public class Candidato {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Column
 	private String nome;
+	
+	@Column
 	private String cpf;
+	
+	@Column
 	private String rg;
+	
+	@Column(name = "data_nasc")
 	private LocalDate dataNasc;
+	
+	@Column
 	private String sexo;
+	
+	@Column
 	private String mae;
+	
+	@Column
 	private String pai;
+	
+	@Column
 	private String email;
+	
+	@Column
 	private String cep;
+	
+	@Column
 	private String endereco;
+	
+	@Column
 	private Integer numero;
+	
+	@Column
 	private String bairro;
+	
+	@Column
 	private String cidade;
+	
+	@Column
 	private String estado;
+	
+	@Column(name = "telefone_fixo")
 	private String telefoneFixo;
+	
+	@Column
 	private String celular;
+	
+	@Column
 	private Double altura;
+	
+	@Column
 	private Double peso;
+	
+	@Column(name = "tipo_sanguineo")
 	private String tipoSanguineo;
 
 	public Integer getId() {
