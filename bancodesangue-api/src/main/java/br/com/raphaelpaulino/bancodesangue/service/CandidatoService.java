@@ -12,12 +12,18 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import br.com.raphaelpaulino.bancodesangue.domain.model.Candidato;
 import br.com.raphaelpaulino.bancodesangue.dto.CandidatoDto;
 import br.com.raphaelpaulino.bancodesangue.dto.ResultadoDto;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @Service
 public class CandidatoService {
-
+	
+	@PersistenceContext
+	private EntityManager manager;
+	
 	public ResultadoDto processar(List<CandidatoDto> candidatos) {
 		ResultadoDto resultado = new ResultadoDto();
 		resultado.setCandidatosPorEstado(contarPorEstado(candidatos));
@@ -114,5 +120,10 @@ public class CandidatoService {
 			resultado.put(receptor, count);
 		}
 		return resultado;
+	}
+	
+	public List<Candidato> buscarTodos() {
+		return manager.createQuery("from Candidato", Candidato.class)
+				.getResultList();
 	}
 }
