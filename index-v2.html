@@ -71,10 +71,24 @@
       <!-- Dashboard -->
       <div class="container mt-4" id="dashboard">
         <h2 class="mb-3">Dashboard</h2>
-        <div class="card mb-3">
+        <div class="card mb-4">
           <div class="card-body">
             <h5 class="card-title">Candidatos por Estado</h5>
             <div id="chartEstados"></div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">IMC Médio por Faixa Etária dos Candidatos</h5>
+            <div id="chartImcFaixa"></div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Percentual de Candidatos Obesos por Sexo</h5>
+            <div id="chartObesosSexo"></div>
           </div>
         </div>
       </div>
@@ -126,7 +140,7 @@
       const text = await file.text();
       const json = JSON.parse(text);
 
-      const resp = await fetch('http://localhost:8080/candidatos/processar', {
+      const resp = await fetch('http://localhost:8080/api/candidatos/processar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(json)
@@ -144,6 +158,14 @@
       if (data.candidatosPorEstado) {
         renderGrafico(data.candidatosPorEstado);
       }
+
+      if (data.imcMedioPorFaixaEtaria) {
+        renderGraficoImcFaixaEtaria(data.imcMedioPorFaixaEtaria);
+      }
+
+      if (data.percentualObesosPorSexo) {
+        renderGraficoObesosPorSexo(data.percentualObesosPorSexo);
+      }
     });
 
     function renderGrafico(estados) {
@@ -159,6 +181,74 @@
       };
       new ApexCharts(document.querySelector("#chartEstados"), options).render();
     }
+
+    function renderGraficoImcFaixaEtaria(imcs) {
+      const options = {
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        title: {
+          text: 'IMC Médio por Faixa Etária',
+          align: 'center'
+        },
+        series: [{
+          name: 'IMC Médio',
+          data: Object.values(imcs)
+        }],
+        xaxis: {
+          categories: Object.keys(imcs),
+          title: {
+            text: 'Faixa Etária'
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'IMC'
+          },
+          min: 0
+        },
+        tooltip: {
+          y: {
+            formatter: val => val.toFixed(2)
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: val => val.toFixed(2)
+        }
+      };
+      new ApexCharts(document.querySelector("#chartImcFaixa"), options).render();
+    }
+
+    function renderGraficoObesosPorSexo(obesos) {
+      const categorias = Object.keys(obesos);
+      const valores = Object.values(obesos).map(v => parseFloat(v.toFixed(2)));
+
+      const options = {
+        chart: {
+          type: 'pie',
+          height: 350
+        },
+        title: {
+          text: 'Percentual de Obesos por Sexo',
+          align: 'center'
+        },
+        labels: categorias,
+        series: valores,
+        tooltip: {
+          y: {
+            formatter: val => `${val.toFixed(2)}%`
+          }
+        },
+        dataLabels: {
+          formatter: val => `${val.toFixed(1)}%`
+        }
+      };
+
+      new ApexCharts(document.querySelector("#chartObesosSexo"), options).render();
+    }
+
 
     function renderTabela() {
       const tbody = document.getElementById('tabelaDoadores');

@@ -2,7 +2,6 @@ package br.com.raphaelpaulino.bancodesangue.service;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import br.com.raphaelpaulino.bancodesangue.domain.model.Candidato;
 import br.com.raphaelpaulino.bancodesangue.dto.CandidatoDto;
 import br.com.raphaelpaulino.bancodesangue.dto.ResultadoDto;
 
@@ -23,6 +21,7 @@ public class CandidatoService {
 		ResultadoDto resultado = new ResultadoDto();
 		resultado.setCandidatosPorEstado(contarPorEstado(candidatos));
 		resultado.setImcMedioPorFaixaEtaria(imcPorFaixa(candidatos));
+		resultado.setPercentualObesosPorSexo(percentualObesidade(candidatos));
 		
 		return resultado;
 	}
@@ -58,5 +57,22 @@ public class CandidatoService {
 	            medias.put(e.getKey(), Math.round(media * 100.0) / 100.0); // arredondar para 2 casas
 		}
 		return medias;
+	}
+	
+	private Map<String, Double> percentualObesidade(List<CandidatoDto> candidatos) {
+		Map<String, List<Double>> imcsPorSexo = new HashMap<>();
+	
+		for (CandidatoDto c : candidatos) {
+			double imc = c.getPeso() / (c.getAltura() * c.getAltura());
+			imcsPorSexo.computeIfAbsent(c.getSexo(), k -> new ArrayList<>()).add(imc);
+		}
+	
+		Map<String, Double> percentuais = new HashMap<>();
+		for (Map.Entry<String, List<Double>> e : imcsPorSexo.entrySet()) {
+			List<Double> imcs = e.getValue();
+			long obesos = imcs.stream().filter(imc -> imc > 30).count();
+			percentuais.put(e.getKey(), (obesos * 100.0) / imcs.size());
+		}
+		return percentuais;
 	}
 }
