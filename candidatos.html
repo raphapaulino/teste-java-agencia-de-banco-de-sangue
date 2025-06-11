@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lista de Candidatos | Banco de Sangue</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="./css/banco-de-sangue-estilos.css">
+</head>
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar d-md-block d-none col-md-3 col-lg-2 px-2 pt-3 position-fixed">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="index-v2.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#doadores">Doadores</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#importar">Importar Doadores</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="candidatos.html">Todos Candidatos</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="flex-grow-1 offset-md-2">
+      <!-- Topbar -->
+      <nav class="topbar navbar navbar-expand-md px-3 py-2 shadow">
+        <span class="logo">Banco de Sangue</span>
+      </nav>
+
+      <div class="container py-5">
+        <h2 class="mb-4">Tabela de Candidatos</h2>
+        <table class="table table-bordered table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Nome</th>
+              <th>CPF</th>
+              <th>Data Nasc.</th>
+              <th>Sexo</th>
+              <th>Email</th>
+              <th>Estado</th>
+              <th>Tipo Sanguíneo</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaCandidatos">
+            <!-- Dados preenchidos via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function carregarCandidatos() {
+      try {
+        const resp = await fetch('http://localhost:8080/api/candidatos/todos');
+        const candidatos = await resp.json();
+
+        const tbody = document.getElementById('tabelaCandidatos');
+        tbody.innerHTML = candidatos.map(c => `
+          <tr>
+            <td>${c.nome}</td>
+            <td>${c.cpf}</td>
+            <td>${c.data_nasc || '-'}</td>
+            <td>${c.sexo}</td>
+            <td>${c.email}</td>
+            <td>${c.estado}</td>
+            <td>${c.tipo_sanguineo}</td>
+          </tr>
+        `).join('');
+
+      } catch (erro) {
+        console.error('Erro ao carregar candidatos:', erro);
+      }
+    }
+
+    carregarCandidatos();
+  </script>
+</body>
+</html>
