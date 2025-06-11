@@ -3,6 +3,9 @@ package br.com.raphaelpaulino.bancodesangue.domain.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +31,8 @@ public class Candidato {
 	private String rg;
 	
 	@Column(name = "data_nasc", nullable = false)
+	@JsonProperty("data_nasc")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate dataNasc;
 	
 	@Column
@@ -61,6 +66,7 @@ public class Candidato {
 	private String estado;
 	
 	@Column(name = "telefone_fixo")
+	@JsonProperty("telefone_fixo")
 	private String telefoneFixo;
 	
 	@Column
@@ -73,6 +79,7 @@ public class Candidato {
 	private Double peso;
 	
 	@Column(name = "tipo_sanguineo")
+	@JsonProperty("tipo_sanguineo")
 	private String tipoSanguineo;
 
 	public Integer getId() {
