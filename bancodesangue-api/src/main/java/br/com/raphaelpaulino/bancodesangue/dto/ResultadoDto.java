@@ -8,6 +8,8 @@ public class ResultadoDto {
 	private Map<String, Double> imcMedioPorFaixaEtaria;
 	
 	private Map<String, Double> percentualObesosPorSexo;
+	
+	private Map<String, Double> mediaIdadePorTipoSanguineo;
 
 	public Map<String, Long> getCandidatosPorEstado() {
 		return candidatosPorEstado;
@@ -31,5 +33,13 @@ public class ResultadoDto {
 	
 	public void setPercentualObesosPorSexo(Map<String, Double> percentualObesosPorSexo) {
 		this.percentualObesosPorSexo = percentualObesosPorSexo;
+	}
+	
+	public Map<String, Double> getMediaIdadePorTipoSanguineo() {
+		return mediaIdadePorTipoSanguineo;
+	}
+	
+	public void setMediaIdadePorTipoSanguineo(Map<String, Double> mediaIdadePorTipoSanguineo) {
+		this.mediaIdadePorTipoSanguineo = mediaIdadePorTipoSanguineo;
 	}
 }

@@ -91,6 +91,13 @@
             <div id="chartObesosSexo"></div>
           </div>
         </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Média de Idade dos Candidatos por Tipo Sanguíneo</h5>
+            <div id="chartIdadeTipoSanguineo"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Doadores -->
@@ -165,6 +172,10 @@
 
       if (data.percentualObesosPorSexo) {
         renderGraficoObesosPorSexo(data.percentualObesosPorSexo);
+      }
+
+      if (data.mediaIdadePorTipoSanguineo) {
+        renderGraficoIdadePorTipoSanguineo(data.mediaIdadePorTipoSanguineo);
       }
     });
 
@@ -249,6 +260,47 @@
       new ApexCharts(document.querySelector("#chartObesosSexo"), options).render();
     }
 
+    function renderGraficoIdadePorTipoSanguineo(dados) {
+      const tipos = Object.keys(dados);
+      const idades = Object.values(dados).map(v => parseFloat(v.toFixed(1)));
+
+      const options = {
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        title: {
+          text: 'Média de Idade por Tipo Sanguíneo',
+          align: 'center'
+        },
+        series: [{
+          name: 'Média de Idade',
+          data: idades
+        }],
+        xaxis: {
+          categories: tipos,
+          title: {
+            text: 'Tipo Sanguíneo'
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'Idade (anos)'
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: val => `${val.toFixed(1)}`
+        },
+        tooltip: {
+          y: {
+            formatter: val => `${val.toFixed(1)} anos`
+          }
+        }
+      };
+
+      new ApexCharts(document.querySelector("#chartIdadeTipoSanguineo"), options).render();
+    }
 
     function renderTabela() {
       const tbody = document.getElementById('tabelaDoadores');

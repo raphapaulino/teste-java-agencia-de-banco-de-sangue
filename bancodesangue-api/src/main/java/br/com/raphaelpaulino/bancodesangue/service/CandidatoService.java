@@ -22,6 +22,7 @@ public class CandidatoService {
 		resultado.setCandidatosPorEstado(contarPorEstado(candidatos));
 		resultado.setImcMedioPorFaixaEtaria(imcPorFaixa(candidatos));
 		resultado.setPercentualObesosPorSexo(percentualObesidade(candidatos));
+		resultado.setMediaIdadePorTipoSanguineo(mediaIdadePorTipo(candidatos));
 		
 		return resultado;
 	}
@@ -74,5 +75,20 @@ public class CandidatoService {
 			percentuais.put(e.getKey(), (obesos * 100.0) / imcs.size());
 		}
 		return percentuais;
+	}
+	
+	private Map<String, Double> mediaIdadePorTipo(List<CandidatoDto> candidatos) {
+		Map<String, List<Integer>> idadesPorTipo = new HashMap<>();
+	
+		for (CandidatoDto c : candidatos) {
+			int idade = Period.between(c.getDataNasc(), LocalDate.now()).getYears();
+			idadesPorTipo.computeIfAbsent(c.getTipoSanguineo(), k -> new ArrayList<>()).add(idade);
+		}
+	
+		Map<String, Double> medias = new TreeMap<>();
+		for (Map.Entry<String, List<Integer>> e : idadesPorTipo.entrySet()) {
+			medias.put(e.getKey(), e.getValue().stream().mapToInt(Integer::intValue).average().orElse(0.0));
+		}
+		return medias;
 	}
 }
