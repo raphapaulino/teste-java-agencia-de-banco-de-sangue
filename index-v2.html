@@ -98,6 +98,13 @@
             <div id="chartIdadeTipoSanguineo"></div>
           </div>
         </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Doadores por Receptor</h5>
+            <div id="chartDoadoresPorReceptor"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Doadores -->
@@ -176,6 +183,10 @@
 
       if (data.mediaIdadePorTipoSanguineo) {
         renderGraficoIdadePorTipoSanguineo(data.mediaIdadePorTipoSanguineo);
+      }
+      
+      if (data.doadoresPorReceptor) {
+        renderGraficoDoadoresPorReceptor(data.doadoresPorReceptor);
       }
     });
 
@@ -301,6 +312,48 @@
 
       new ApexCharts(document.querySelector("#chartIdadeTipoSanguineo"), options).render();
     }
+
+    function renderGraficoDoadoresPorReceptor(dados) {
+      const tipos = Object.keys(dados);
+      const quantidades = Object.values(dados);
+
+      const options = {
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        title: {
+          text: 'Doadores Possíveis por Tipo Sanguíneo Receptor',
+          align: 'center'
+        },
+        series: [{
+          name: 'Doadores',
+          data: quantidades
+        }],
+        xaxis: {
+          categories: tipos,
+          title: {
+            text: 'Tipo Sanguíneo Receptor'
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'Quantidade de Doadores'
+          }
+        },
+        dataLabels: {
+          enabled: true
+        },
+        tooltip: {
+          y: {
+            formatter: val => `${val} doadores`
+          }
+        }
+      };
+
+      new ApexCharts(document.querySelector("#chartDoadoresPorReceptor"), options).render();
+    }
+
 
     function renderTabela() {
       const tbody = document.getElementById('tabelaDoadores');

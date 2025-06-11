@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,7 @@ public class CandidatoService {
 		resultado.setImcMedioPorFaixaEtaria(imcPorFaixa(candidatos));
 		resultado.setPercentualObesosPorSexo(percentualObesidade(candidatos));
 		resultado.setMediaIdadePorTipoSanguineo(mediaIdadePorTipo(candidatos));
+		resultado.setDoadoresPorReceptor(doadoresCompativeis(candidatos));
 		
 		return resultado;
 	}
@@ -90,5 +92,35 @@ public class CandidatoService {
 			medias.put(e.getKey(), e.getValue().stream().mapToInt(Integer::intValue).average().orElse(0.0));
 		}
 		return medias;
+	}
+	
+	private Map<String, Integer> doadoresCompativeis(List<CandidatoDto> candidatos) {
+		// Mapa de compatibilidade
+		Map<String, Set<String>> compatibilidade = new HashMap<>();
+		compatibilidade.put("A+", Set.of("A+", "AB+"));
+		compatibilidade.put("A-", Set.of("A+", "A-", "AB+", "AB-"));
+		compatibilidade.put("B+", Set.of("B+", "AB+"));
+		compatibilidade.put("B-", Set.of("B+", "B-", "AB+", "AB-"));
+		compatibilidade.put("AB+", Set.of("AB+"));
+		compatibilidade.put("AB-", Set.of("AB+", "AB-"));
+		compatibilidade.put("O+", Set.of("A+", "B+", "O+", "AB+"));
+		compatibilidade.put("O-", Set.of("A+", "B+", "O+", "AB+", "A-", "B-", "O-", "AB-"));
+	
+		Map<String, Integer> resultado = new TreeMap<>();
+	
+		for (String receptor : compatibilidade.values().stream().flatMap(Set::stream).collect(Collectors.toSet())) {
+			int count = 0;
+			for (CandidatoDto doador : candidatos) {
+				int idade = Period.between(doador.getDataNasc(), LocalDate.now()).getYears();
+				if (idade < 16 || idade > 69 || doador.getPeso() <= 50) continue;
+	
+				String tipo = doador.getTipoSanguineo();
+				if (compatibilidade.containsKey(tipo) && compatibilidade.get(tipo).contains(receptor)) {
+					count++;
+				}
+			}
+			resultado.put(receptor, count);
+		}
+		return resultado;
 	}
 }
