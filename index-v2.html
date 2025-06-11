@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Banco de Sangue</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .sidebar {
+      min-height: 100vh;
+      background-color: #343a40;
+    }
+
+    .sidebar .nav-link {
+      color: #fff;
+    }
+
+    .sidebar .nav-link.active {
+      background-color: #495057;
+    }
+
+    .topbar {
+      background-color: #6f42c1;
+      color: white;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    @media (min-width: 768px) {
+      .sidebar-collapse {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar d-md-block d-none col-md-3 col-lg-2 px-2 pt-3 position-fixed">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#doadores">Doadores</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#importar">Importar Doadores</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="flex-grow-1 offset-md-2">
+      <!-- Topbar -->
+      <nav class="topbar navbar navbar-expand-md px-3 py-2 shadow">
+        <span class="logo">Banco de Sangue</span>
+      </nav>
+
+      <!-- Dashboard -->
+      <div class="container mt-4" id="dashboard">
+        <h2 class="mb-3">Dashboard</h2>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Candidatos por Estado</h5>
+            <div id="chartEstados"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Doadores -->
+      <div class="container mt-4" id="doadores">
+        <h2 class="mb-3">Lista de Doadores</h2>
+        <div class="card">
+          <div class="card-body table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>CPF</th>
+                  <th>Data Nasc.</th>
+                  <th>Sexo</th>
+                  <th>Email</th>
+                  <th>Estado</th>
+                  <th>Tipo Sanguíneo</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaDoadores">
+                <!-- Populado via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Importar -->
+      <div class="container mt-4" id="importar">
+        <h2 class="mb-3">Importar Doadores</h2>
+        <div class="alert alert-info">Por favor, envie um arquivo <strong>data.json</strong> contendo os dados dos doadores para que eles sejam salvos e os gráficos atualizados.</div>
+        <form id="uploadForm">
+          <input type="file" id="jsonFile" class="form-control mb-3" accept=".json" required>
+          <button class="btn btn-primary" type="submit">Enviar</button>
+        </form>
+        <div id="resultados" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const doadores = [];
+
+    document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const file = document.getElementById('jsonFile').files[0];
+      const text = await file.text();
+      const json = JSON.parse(text);
+
+      const resp = await fetch('http://localhost:8080/candidatos/processar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(json)
+      });
+
+      const data = await resp.json();
+      document.getElementById('resultados').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+
+      if (Array.isArray(json)) {
+        doadores.length = 0;
+        doadores.push(...json);
+        renderTabela();
+      }
+
+      if (data.candidatosPorEstado) {
+        renderGrafico(data.candidatosPorEstado);
+      }
+    });
+
+    function renderGrafico(estados) {
+      const options = {
+        chart: { type: 'bar' },
+        series: [{
+          name: 'Candidatos',
+          data: Object.values(estados)
+        }],
+        xaxis: {
+          categories: Object.keys(estados)
+        }
+      };
+      new ApexCharts(document.querySelector("#chartEstados"), options).render();
+    }
+
+    function renderTabela() {
+      const tbody = document.getElementById('tabelaDoadores');
+      tbody.innerHTML = doadores.map(d => `
+        <tr>
+          <td>${d.nome}</td>
+          <td>${d.cpf}</td>
+          <td>${d.data_nasc}</td>
+          <td>${d.sexo}</td>
+          <td>${d.email}</td>
+          <td>${d.estado}</td>
+          <td>${d.tipo_sanguineo}</td>
+        </tr>
+      `).join('');
+    }
+  </script>
+</body>
+
+</html>
