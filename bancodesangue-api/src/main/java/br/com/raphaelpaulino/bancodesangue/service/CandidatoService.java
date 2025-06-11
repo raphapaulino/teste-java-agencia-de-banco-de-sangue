@@ -30,38 +30,30 @@ public class CandidatoService {
 	}
 
 	private Map<String, Long> contarPorEstado(List<CandidatoDto> candidatos) {
-		return candidatos.stream()
-				.collect(Collectors.groupingBy(CandidatoDto::getEstado, Collectors.counting()));
+	    return candidatos.stream()
+	        .collect(Collectors.groupingBy(CandidatoDto::getEstado, Collectors.counting()));
 	}
-	
 
 	private Map<String, Double> imcPorFaixa(List<CandidatoDto> candidatos) {
-		Map<String, List<Double>> imcsPorFaixa = new HashMap<>();
+	    Map<String, List<Double>> imcsPorFaixa = new HashMap<>();
 
-		for (CandidatoDto c : candidatos) {			
-			int idade = Period.between(c.getDataNasc(), LocalDate.now()).getYears();
-			String faixa = ((idade / 10) * 10) + "-" + (((idade / 10) * 10) + 9);
+	    for (CandidatoDto c : candidatos) {
+	        int idade = Period.between(c.getDataNasc(), LocalDate.now()).getYears();
+	        
+	        String faixa = ((idade / 10) * 10) + "-" + (((idade / 10) * 10) + 9);
 
-			double imc = c.getPeso() / (c.getAltura() * c.getAltura());
-			imcsPorFaixa
-				.computeIfAbsent(faixa, k -> new ArrayList<>())
-				.add(imc);
-		}
+	        double imc = c.getPeso() / (c.getAltura() * c.getAltura());
+	        imcsPorFaixa.computeIfAbsent(faixa, k -> new ArrayList<>()).add(imc);
+	    }
 
-		Map<String, Double> medias = new TreeMap<>();
-		for (Map.Entry<String, List<Double>> e : imcsPorFaixa.entrySet()) {
-
-	        double media = e.getValue()
-				.stream()
-				.mapToDouble(Double::doubleValue)
-				.average()
-				.orElse(0.0);
-
-	            medias.put(e.getKey(), Math.round(media * 100.0) / 100.0); // arredondar para 2 casas
-		}
-		return medias;
+	    Map<String, Double> medias = new TreeMap<>();
+	    for (Map.Entry<String, List<Double>> e : imcsPorFaixa.entrySet()) {
+	        double media = e.getValue().stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+	        medias.put(e.getKey(), Math.round(media * 100.0) / 100.0);
+	    }
+	    return medias;
 	}
-	
+
 	private Map<String, Double> percentualObesidade(List<CandidatoDto> candidatos) {
 		Map<String, List<Double>> imcsPorSexo = new HashMap<>();
 	
@@ -112,7 +104,7 @@ public class CandidatoService {
 			int count = 0;
 			for (CandidatoDto doador : candidatos) {
 				int idade = Period.between(doador.getDataNasc(), LocalDate.now()).getYears();
-				if (idade < 16 || idade > 69 || doador.getPeso() <= 50) continue;
+				if (idade < 16 || idade > 69 || doador.getPeso() <= 50) continue; // deve estar apto para doação
 	
 				String tipo = doador.getTipoSanguineo();
 				if (compatibilidade.containsKey(tipo) && compatibilidade.get(tipo).contains(receptor)) {
