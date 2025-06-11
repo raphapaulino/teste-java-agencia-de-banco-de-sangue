@@ -1,78 +1,59 @@
-package br.com.raphaelpaulino.bancodesangue.domain.model;
+package br.com.raphaelpaulino.bancodesangue.dto;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Entity
-@Table(name = "candidatos")
-public class Candidato {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+
+public class CandidatoDto {
+
 	private Integer id;
 	
-	@Column
 	private String nome;
 	
-	@Column
 	private String cpf;
 	
-	@Column
 	private String rg;
 	
-	@Column(name = "data_nasc", nullable = false)
+	@Past(message = "Data de nascimento deve ser uma data no passado")
+	@NotNull(message = "Data de nascimento é obrigatória")
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@JsonProperty("data_nasc")
 	private LocalDate dataNasc;
 	
-	@Column
 	private String sexo;
 	
-	@Column
 	private String mae;
 	
-	@Column
 	private String pai;
 	
-	@Column
 	private String email;
 	
-	@Column
 	private String cep;
 	
-	@Column
 	private String endereco;
 	
-	@Column
 	private Integer numero;
 	
-	@Column
 	private String bairro;
 	
-	@Column
 	private String cidade;
 	
-	@Column
 	private String estado;
 	
-	@Column(name = "telefone_fixo")
+	@JsonProperty("telefone_fixo")
 	private String telefoneFixo;
 	
-	@Column
 	private String celular;
 	
-	@Column
 	private Double altura;
 	
-	@Column
 	private Double peso;
-	
-	@Column(name = "tipo_sanguineo")
+
+	@JsonProperty("tipo_sanguineo")
 	private String tipoSanguineo;
 
 	public Integer getId() {
@@ -233,22 +214,5 @@ public class Candidato {
 
 	public void setTipoSanguineo(String tipoSanguineo) {
 		this.tipoSanguineo = tipoSanguineo;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Candidato other = (Candidato) obj;
-		return Objects.equals(id, other.id);
 	}
 }
