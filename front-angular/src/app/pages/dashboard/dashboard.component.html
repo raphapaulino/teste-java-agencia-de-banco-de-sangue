@@ -1,10 +1,9 @@
-<div class="container mt-4">
-  <h2 class="mb-3">Dashboard</h2>
-  <apx-chart
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart"
-    [xaxis]="chartOptions.xaxis"
-    [title]="chartOptions.title"
-    [dataLabels]="chartOptions.dataLabels">
-  </apx-chart>
-</div>
+<h5 class="card-title">Candidatos por Estado</h5>
+<apx-chart
+  *ngIf="chartOptionsImc.series"
+  [series]="chartOptionsImc.series!"
+  [chart]="chartOptionsImc.chart!"
+  [title]="chartOptionsImc.title!"
+  [xaxis]="chartOptionsImc.xaxis!"
+  [plotOptions]="chartOptionsImc.plotOptions!">
+</apx-chart>
