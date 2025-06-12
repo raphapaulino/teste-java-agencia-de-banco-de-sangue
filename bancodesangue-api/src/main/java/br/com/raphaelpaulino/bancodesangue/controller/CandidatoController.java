@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.raphaelpaulino.bancodesangue.domain.model.Candidato;
 import br.com.raphaelpaulino.bancodesangue.dto.CandidatoDto;
 import br.com.raphaelpaulino.bancodesangue.dto.ResultadoDto;
+import br.com.raphaelpaulino.bancodesangue.dto.ResultadoGraficosDto;
 import br.com.raphaelpaulino.bancodesangue.service.CandidatoService;
 import jakarta.validation.Valid;
 
@@ -30,10 +31,10 @@ public class CandidatoController {
         return service.processar(candidatos);
     }
 
-    @GetMapping("/todos")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Candidato> candidatos() {
+    @GetMapping("/imc-por-candidato")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResultadoGraficosDto processarGraficos() {
         return service.buscarTodos();
     }
-    
+
 }

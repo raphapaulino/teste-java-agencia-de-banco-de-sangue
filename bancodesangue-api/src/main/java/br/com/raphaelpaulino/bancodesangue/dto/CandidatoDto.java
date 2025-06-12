@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import br.com.raphaelpaulino.bancodesangue.domain.model.Candidato;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 
@@ -55,6 +56,29 @@ public class CandidatoDto {
 
 	@JsonProperty("tipo_sanguineo")
 	private String tipoSanguineo;
+	
+	public CandidatoDto(Candidato candidato) {
+	    this.id = candidato.getId();
+	    this.nome = candidato.getNome();
+	    this.cpf = candidato.getCpf();
+	    this.rg = candidato.getRg();
+	    this.dataNasc = candidato.getDataNasc();
+	    this.sexo = candidato.getSexo();
+	    this.mae = candidato.getMae();
+	    this.pai = candidato.getPai();
+	    this.email = candidato.getEmail();
+	    this.cep = candidato.getCep();
+	    this.endereco = candidato.getEndereco();
+	    this.numero = candidato.getNumero();
+	    this.bairro = candidato.getBairro();
+	    this.cidade = candidato.getCidade();
+	    this.estado = candidato.getEstado();
+	    this.telefoneFixo = candidato.getTelefoneFixo();
+	    this.celular = candidato.getCelular();
+	    this.altura = candidato.getAltura();
+	    this.peso = candidato.getPeso();
+	    this.tipoSanguineo = candidato.getTipoSanguineo();
+	}
 
 	public Integer getId() {
 		return id;

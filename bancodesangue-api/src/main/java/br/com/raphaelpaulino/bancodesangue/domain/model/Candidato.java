@@ -3,9 +3,6 @@ package br.com.raphaelpaulino.bancodesangue.domain.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,67 +16,64 @@ public class Candidato {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
 	
-	@Column
+	@Column(name = "nome")
 	private String nome;
 	
-	@Column
+	@Column(name = "cpf")
 	private String cpf;
 	
-	@Column
+	@Column(name = "rg")
 	private String rg;
 	
 	@Column(name = "data_nasc", nullable = false)
-	@JsonProperty("data_nasc")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate dataNasc;
 	
-	@Column
+	@Column(name = "sexo")
 	private String sexo;
 	
-	@Column
+	@Column(name = "mae")
 	private String mae;
 	
-	@Column
+	@Column(name = "pai")
 	private String pai;
 	
-	@Column
+	@Column(name = "email")
 	private String email;
 	
-	@Column
+	@Column(name = "cep")
 	private String cep;
 	
-	@Column
+	@Column(name = "endereco")
 	private String endereco;
 	
-	@Column
+	@Column(name = "numero")
 	private Integer numero;
 	
-	@Column
+	@Column(name = "bairro")
 	private String bairro;
 	
-	@Column
+	@Column(name = "cidade")
 	private String cidade;
 	
-	@Column
+	@Column(name = "estado")
 	private String estado;
 	
 	@Column(name = "telefone_fixo")
-	@JsonProperty("telefone_fixo")
 	private String telefoneFixo;
 	
-	@Column
+	@Column(name = "celular")
 	private String celular;
 	
-	@Column
+	@Column(name = "altura")
 	private Double altura;
 	
-	@Column
+	@Column(name = "peso")
 	private Double peso;
 	
 	@Column(name = "tipo_sanguineo")
-	@JsonProperty("tipo_sanguineo")
 	private String tipoSanguineo;
 
 	public Integer getId() {

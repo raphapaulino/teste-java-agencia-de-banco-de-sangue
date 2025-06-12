@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import br.com.raphaelpaulino.bancodesangue.domain.model.Candidato;
 import br.com.raphaelpaulino.bancodesangue.dto.CandidatoDto;
 import br.com.raphaelpaulino.bancodesangue.dto.ResultadoDto;
+import br.com.raphaelpaulino.bancodesangue.dto.ResultadoGraficosDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -122,8 +123,17 @@ public class CandidatoService {
 		return resultado;
 	}
 	
-	public List<Candidato> buscarTodos() {
-		return manager.createQuery("from Candidato", Candidato.class)
-				.getResultList();
+	public ResultadoGraficosDto buscarTodos() {
+	     List<Candidato> candidatos = manager.createQuery("from Candidato", Candidato.class)
+	         .getResultList();
+
+	     List<CandidatoDto> candidatoDtos = candidatos.stream()
+	         .map(CandidatoDto::new)
+	         .toList();
+
+	    ResultadoGraficosDto resultado = new ResultadoGraficosDto();
+	    resultado.setImcMedioPorFaixaEtaria(imcPorFaixa(candidatoDtos));
+
+	    return resultado;
 	}
 }
