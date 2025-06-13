@@ -1,0 +1,11 @@
+<h5 class="card-title">Importar Doadores</h5>
+
+<div class="mb-3">
+  <label for="jsonFile" class="form-label">Selecione o arquivo JSON:</label>
+  <input type="file" class="form-control" id="jsonFile" (change)="onFileChange($event)" accept=".json">
+</div>
+
+<div *ngIf="dadosImportados.length > 0">
+  <h5 class="mt-4">Pré-visualização dos dados:</h5>
+  <pre>{{ dadosImportados | json }}</pre>
+</div>

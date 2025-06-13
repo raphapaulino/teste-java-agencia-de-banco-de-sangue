@@ -1,0 +1,32 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.sidebar {
+  min-height: 100vh;
+  background-color: #343a40;
+}
+
+.sidebar .nav-link {
+  color: #fff;
+}
+
+.sidebar .nav-link.active {
+  background-color: #495057;
+}
+
+.topbar {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+@media (min-width: 768px) {
+  .sidebar-collapse {
+    display: block !important;
+  }
+}

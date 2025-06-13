@@ -1,1 +1,3 @@
 /docs/*
+/bancodesangue-api/src/main/resources/application-development.properties
+/bancodesangue-api/src/main/resources/application-production.properties
