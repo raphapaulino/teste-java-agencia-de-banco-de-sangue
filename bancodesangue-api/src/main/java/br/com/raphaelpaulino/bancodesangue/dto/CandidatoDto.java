@@ -57,6 +57,9 @@ public class CandidatoDto {
 	@JsonProperty("tipo_sanguineo")
 	private String tipoSanguineo;
 	
+	public CandidatoDto() {
+	}
+	
 	public CandidatoDto(Candidato candidato) {
 	    this.id = candidato.getId();
 	    this.nome = candidato.getNome();
