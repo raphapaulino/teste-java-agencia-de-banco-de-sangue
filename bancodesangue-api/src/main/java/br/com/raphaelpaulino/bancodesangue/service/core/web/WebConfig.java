@@ -8,17 +8,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+	private final String protocol = "http://";
 	
 	@Value("${server.address}")
-	private String host;
+	private  String host;
 	
-	@Value("${frontend.server.port}")
-	private Integer porta;
-	  
+	@Value("${frontbootstrap.server.port}")
+	private Integer portaBoostrap;
+
+	@Value("${frontangular.server.port}")
+	private Integer portaAngular;
+
 	@Override
 	public void addCorsMappings(@NonNull CorsRegistry registry) {
 		registry.addMapping("/**")
-			.allowedMethods("GET", "POST", "HEAD")
-			.allowedOrigins("http://" + this.host + ":" + this.porta);
+				.allowedMethods("GET", "POST", "HEAD")
+				.allowedOrigins(
+					this.protocol + this.host + ":" + this.portaBoostrap,
+					this.protocol + this.host + ":" + this.portaAngular
+				);
 	}
 }

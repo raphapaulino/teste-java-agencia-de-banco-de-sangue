@@ -18,62 +18,62 @@ public class Candidato {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	
-	@Column(name = "nome")
+
+	@Column(name = "nome", nullable = false)
 	private String nome;
 	
-	@Column(name = "cpf")
+	@Column(name = "cpf", nullable = false)
 	private String cpf;
 	
-	@Column(name = "rg")
+	@Column(name = "rg", nullable = false)
 	private String rg;
 	
 	@Column(name = "data_nasc", nullable = false)
 	private LocalDate dataNasc;
 	
-	@Column(name = "sexo")
+	@Column(name = "sexo", nullable = false)
 	private String sexo;
 	
-	@Column(name = "mae")
+	@Column(name = "mae", nullable = false)
 	private String mae;
 	
-	@Column(name = "pai")
+	@Column(name = "pai", nullable = false)
 	private String pai;
 	
-	@Column(name = "email")
+	@Column(name = "email", nullable = false)
 	private String email;
 	
-	@Column(name = "cep")
+	@Column(name = "cep", nullable = false)
 	private String cep;
 	
-	@Column(name = "endereco")
+	@Column(name = "endereco", nullable = false)
 	private String endereco;
 	
-	@Column(name = "numero")
+	@Column(name = "numero", nullable = false)
 	private Integer numero;
 	
-	@Column(name = "bairro")
+	@Column(name = "bairro", nullable = false)
 	private String bairro;
 	
-	@Column(name = "cidade")
+	@Column(name = "cidade", nullable = false)
 	private String cidade;
 	
-	@Column(name = "estado")
+	@Column(name = "estado", nullable = false)
 	private String estado;
 	
-	@Column(name = "telefone_fixo")
+	@Column(name = "telefone_fixo", nullable = false)
 	private String telefoneFixo;
 	
-	@Column(name = "celular")
+	@Column(name = "celular", nullable = false)
 	private String celular;
 	
-	@Column(name = "altura")
+	@Column(name = "altura", nullable = false)
 	private Double altura;
 	
-	@Column(name = "peso")
+	@Column(name = "peso", nullable = false)
 	private Double peso;
 	
-	@Column(name = "tipo_sanguineo")
+	@Column(name = "tipo_sanguineo", nullable = false)
 	private String tipoSanguineo;
 
 	public Integer getId() {

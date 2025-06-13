@@ -43,8 +43,7 @@ export class CandidatosService {
     return this.loadEstatisticas().pipe(map(d => d.doadoresPorReceptor));
   }
 
-  // 🔄 Força recarregar estatísticas
-  // recarregarEstatisticas() {
-  //   this.estatisticas$ = undefined as any;
-  // }
+  recarregarEstatisticas() {
+    this.estatisticas$ = undefined as any;
+  }
 }
