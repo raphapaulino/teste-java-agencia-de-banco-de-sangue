@@ -63,8 +63,8 @@ export class DashboardComponent implements OnInit {
   constructor(private candidatosService: CandidatosService) {}
 
   ngOnInit(): void {
-    this.candidatosService.getImcPorFaixa().subscribe((dados) => {
-      const imcData = dados.imcMedioPorFaixaEtaria;
+    this.candidatosService.getImcPorFaixa().subscribe((imcData) => {
+      if (!imcData) return;
       const categorias = Object.keys(imcData); // ["20-29", "30-39", ...]
       const valores = Object.values(imcData); // [24.75, 25.5, ...]
 
@@ -93,8 +93,8 @@ export class DashboardComponent implements OnInit {
       };
     });
 
-    this.candidatosService.getDistribuicaoPorEstado().subscribe((dados) => {
-      const candidatosPorEstadoData = dados.candidatosPorEstado;
+    this.candidatosService.getDistribuicaoPorEstado().subscribe((candidatosPorEstadoData) => {
+      if (!candidatosPorEstadoData) return;
       const categorias = Object.keys(candidatosPorEstadoData); // ["RR", "RS", ...]
       const valores = Object.values(candidatosPorEstadoData); // [12, 9, ...]
 
@@ -114,8 +114,8 @@ export class DashboardComponent implements OnInit {
       };
     });
 
-    this.candidatosService.percentualObesidade().subscribe((dados) => {
-      const percentualObesosPorSexoData = dados.percentualObesosPorSexo;
+    this.candidatosService.percentualObesidade().subscribe((percentualObesosPorSexoData) => {
+      if (!percentualObesosPorSexoData) return;
       const categorias = Object.keys(percentualObesosPorSexoData);
       const valores = Object.values(percentualObesosPorSexoData).map((v) =>
         parseFloat(v.toFixed(2))
@@ -148,8 +148,8 @@ export class DashboardComponent implements OnInit {
       };
     });
 
-    this.candidatosService.getMediaIdadePorTipoSanguineo().subscribe((dados) => {
-      const mediaIdadePorTipoSanguineoData = dados.mediaIdadePorTipoSanguineo;
+    this.candidatosService.getMediaIdadePorTipoSanguineo().subscribe((mediaIdadePorTipoSanguineoData) => {
+      if (!mediaIdadePorTipoSanguineoData) return;
       const tipos = Object.keys(mediaIdadePorTipoSanguineoData); // ["A+", "AB+", ...]
       const valores = Object.values(mediaIdadePorTipoSanguineoData).map(v => parseFloat(v.toFixed(1))); // [47.6341, 58.5151, ...]
 
@@ -195,8 +195,8 @@ export class DashboardComponent implements OnInit {
       };
     });
 
-    this.candidatosService.getQuantidadePossiveisDoadores().subscribe((dados) => {
-      const doadoresPorReceptorData = dados.doadoresPorReceptor;
+    this.candidatosService.getQuantidadePossiveisDoadores().subscribe((doadoresPorReceptorData) => {
+      if (!doadoresPorReceptorData) return;
       const tipos = Object.keys(doadoresPorReceptorData); // ["A+", "A-", ...]
       const quantidades = Object.values(doadoresPorReceptorData); // [113, 208, ...]
 

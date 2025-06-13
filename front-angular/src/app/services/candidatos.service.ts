@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { EstatisticasCandidatos } from '../pages/dashboard/estatisticas-candidatos.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,35 +10,41 @@ import { environment } from '../../environments/environment';
 export class CandidatosService {
   private apiUrl = environment.apiUrl;
 
+  private estatisticas$!: Observable<EstatisticasCandidatos>;
+
   constructor(private http: HttpClient) {}
 
-  getDistribuicaoPorEstado(): Observable<{ candidatosPorEstado: { [faixa: string]: number } }> {
-    return this.http.get<{ candidatosPorEstado: { [estado: string]: number } }>(
-      `${this.apiUrl}/api/candidatos/estatisticas-para-os-graficos`
-    );
+  private loadEstatisticas(): Observable<EstatisticasCandidatos> {
+    if (!this.estatisticas$) {
+      this.estatisticas$ = this.http
+        .get<EstatisticasCandidatos>(`${this.apiUrl}/api/candidatos/estatisticas-para-os-graficos`)
+        .pipe(shareReplay(1)); // Reutiliza a última emissão
+    }
+    return this.estatisticas$;
   }
 
-  getImcPorFaixa(): Observable<{ imcMedioPorFaixaEtaria: { [faixa: string]: number } }> {
-    return this.http.get<{ imcMedioPorFaixaEtaria: { [faixa: string]: number } }>(
-      `${this.apiUrl}/api/candidatos/estatisticas-para-os-graficos`
-    );
+  getDistribuicaoPorEstado(): Observable<Record<string, number>> {
+    return this.loadEstatisticas().pipe(map(d => d.candidatosPorEstado));
   }
 
-  percentualObesidade(): Observable<{ percentualObesosPorSexo: { [faixa: string]: number } }> {
-    return this.http.get<{ percentualObesosPorSexo: { [faixa: string]: number } }>(
-      `${this.apiUrl}/api/candidatos/estatisticas-para-os-graficos`
-    );
+  getImcPorFaixa() {
+    return this.loadEstatisticas().pipe(map(d => d.imcMedioPorFaixaEtaria));
   }
 
-  getMediaIdadePorTipoSanguineo(): Observable<{ mediaIdadePorTipoSanguineo: { [faixa: string]: number } }> {
-    return this.http.get<{ mediaIdadePorTipoSanguineo: { [faixa: string]: number } }>(
-      `${this.apiUrl}/api/candidatos/estatisticas-para-os-graficos`
-    );
+  percentualObesidade() {
+    return this.loadEstatisticas().pipe(map(d => d.percentualObesosPorSexo));
   }
 
-  getQuantidadePossiveisDoadores(): Observable<{ doadoresPorReceptor: { [faixa: string]: number } }> {
-    return this.http.get<{ doadoresPorReceptor: { [faixa: string]: number } }>(
-      `${this.apiUrl}/api/candidatos/estatisticas-para-os-graficos`
-    );
+  getMediaIdadePorTipoSanguineo() {
+    return this.loadEstatisticas().pipe(map(d => d.mediaIdadePorTipoSanguineo));
   }
+
+  getQuantidadePossiveisDoadores() {
+    return this.loadEstatisticas().pipe(map(d => d.doadoresPorReceptor));
+  }
+
+  // 🔄 Força recarregar estatísticas
+  // recarregarEstatisticas() {
+  //   this.estatisticas$ = undefined as any;
+  // }
 }
