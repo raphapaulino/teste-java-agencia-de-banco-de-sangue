@@ -133,7 +133,8 @@ public class CandidatoService {
 
 	    ResultadoGraficosDto resultado = new ResultadoGraficosDto();
 	    resultado.setImcMedioPorFaixaEtaria(imcPorFaixa(candidatoDtos));
-
+		resultado.setCandidatosPorEstado(contarPorEstado(candidatoDtos));
+		
 	    return resultado;
 	}
 }

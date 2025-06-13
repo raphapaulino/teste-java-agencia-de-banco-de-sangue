@@ -39,6 +39,7 @@ export type ChartOptions = {
 })
 export class DashboardComponent implements OnInit {
   public chartOptionsImc: Partial<ChartOptions> = {};
+  public chartOptionsCandidatosPorEstado: Partial<ChartOptions> = {};
 
   constructor(private candidatosService: CandidatosService) {}
 
@@ -58,6 +59,36 @@ export class DashboardComponent implements OnInit {
         chart: {
           type: 'bar',
           height: 350,
+        },
+        title: {
+          text: 'IMC por Faixa Etária',
+        },
+        xaxis: {
+          categories: categorias,
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+          },
+        },
+      };
+    });
+
+    this.candidatosService.getDistribuicaoPorEstado().subscribe((dados) => {
+      const candidatosPorEstadoData = dados.candidatosPorEstado;
+      const categorias = Object.keys(candidatosPorEstadoData); // ["20-29", "30-39", ...]
+      const valores = Object.values(candidatosPorEstadoData);  // [24.75, 25.5, ...]
+
+      this.chartOptionsCandidatosPorEstado = {
+        series: [
+          {
+            name: 'Candidatos',
+            data: valores,
+          },
+        ],
+        chart: {
+          type: 'bar',
+          // height: 350,
         },
         title: {
           text: 'IMC por Faixa Etária',

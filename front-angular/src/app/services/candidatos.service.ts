@@ -11,9 +11,15 @@ export class CandidatosService {
 
   constructor(private http: HttpClient) {}
 
+  getDistribuicaoPorEstado(): Observable<{ candidatosPorEstado: { [faixa: string]: number } }> {
+    return this.http.get<{ candidatosPorEstado: { [estado: string]: number } }>(
+      `${this.apiUrl}/api/candidatos/estatisticas-para-os-graficos`
+    );
+  }
+
   getImcPorFaixa(): Observable<{ imcMedioPorFaixaEtaria: { [faixa: string]: number } }> {
     return this.http.get<{ imcMedioPorFaixaEtaria: { [faixa: string]: number } }>(
-      `${this.apiUrl}/api/candidatos/imc-por-candidato`
+      `${this.apiUrl}/api/candidatos/estatisticas-para-os-graficos`
     );
   }
 }

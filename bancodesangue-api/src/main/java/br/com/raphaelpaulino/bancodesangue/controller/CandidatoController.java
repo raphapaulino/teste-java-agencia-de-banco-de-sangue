@@ -31,10 +31,9 @@ public class CandidatoController {
         return service.processar(candidatos);
     }
 
-    @GetMapping("/imc-por-candidato")
+    @GetMapping("/estatisticas-para-os-graficos")
     @ResponseStatus(HttpStatus.CREATED)
     public ResultadoGraficosDto processarGraficos() {
         return service.buscarTodos();
     }
-
 }
