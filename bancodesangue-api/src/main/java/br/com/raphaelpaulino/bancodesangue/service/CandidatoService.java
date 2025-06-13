@@ -135,6 +135,7 @@ public class CandidatoService {
 	    resultado.setImcMedioPorFaixaEtaria(imcPorFaixa(candidatoDtos));
 		resultado.setCandidatosPorEstado(contarPorEstado(candidatoDtos));
 		resultado.setPercentualObesosPorSexo(percentualObesidade(candidatoDtos));
+		resultado.setMediaIdadePorTipoSanguineo(mediaIdadePorTipo(candidatoDtos));
 		
 	    return resultado;
 	}

@@ -45,3 +45,18 @@
   </div>
 </div>
 
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Média de Idade dos Candidatos por Tipo Sanguíneo</h5>
+
+    <apx-chart
+      *ngIf="chartOptionsMediaIdadePorTipoSanguineo.series"
+      [series]="chartOptionsMediaIdadePorTipoSanguineo.series!"
+      [chart]="chartOptionsMediaIdadePorTipoSanguineo.chart!"
+      [title]="chartOptionsMediaIdadePorTipoSanguineo.title!"
+      [xaxis]="chartOptionsMediaIdadePorTipoSanguineo.xaxis!"
+      [plotOptions]="chartOptionsMediaIdadePorTipoSanguineo.plotOptions!">
+    </apx-chart>
+  </div>
+</div>
+

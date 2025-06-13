@@ -5,6 +5,7 @@ import {
   ApexNonAxisChartSeries,
   ApexChart,
   ApexXAxis,
+  ApexYAxis, 
   ApexTitleSubtitle,
   ApexDataLabels,
   ApexPlotOptions,
@@ -29,6 +30,7 @@ export type ChartOptions = {
   fill?: ApexFill;
   stroke?: ApexStroke;
   tooltip?: ApexTooltip;
+  yaxis?: ApexYAxis;
 };
 
 export type PieChartOptions = {
@@ -55,6 +57,7 @@ export class DashboardComponent implements OnInit {
   public chartOptionsImc: Partial<ChartOptions> = {};
   public chartOptionsCandidatosPorEstado: Partial<ChartOptions> = {};
   public chartOptionsPercentualObesosPorSexo: Partial<PieChartOptions> = {};
+  public chartOptionsMediaIdadePorTipoSanguineo: Partial<ChartOptions> = {};
 
   constructor(private candidatosService: CandidatosService) {}
 
@@ -143,5 +146,53 @@ export class DashboardComponent implements OnInit {
         }
       };
     });
+
+    this.candidatosService.getMediaIdadePorTipoSanguineo().subscribe((dados) => {
+      const mediaIdadePorTipoSanguineoData = dados.mediaIdadePorTipoSanguineo;
+      const tipos = Object.keys(mediaIdadePorTipoSanguineoData); // ["A+", "AB+", ...]
+      const valores = Object.values(mediaIdadePorTipoSanguineoData).map(v => parseFloat(v.toFixed(1))); // [47.6341, 58.5151, ...]
+
+      this.chartOptionsMediaIdadePorTipoSanguineo = {
+        series: [
+          {
+            name: 'Média de Idade',
+            data: valores,
+          },
+        ],
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        title: {
+          text: 'Média de Idade por Tipo Sanguíneo',
+          align: 'center'
+        },
+        xaxis: {
+          categories: tipos,
+          title: {
+            text: 'Tipo Sanguíneo'
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'Idade (anos)'
+          }
+        },
+        dataLabels: {
+          formatter: (val: string | number | number[]) => {
+            if (typeof val === 'number') {
+              return `${val.toFixed(1)}%`;
+            }
+            return `${val}%`;
+          },
+        },
+        tooltip: {
+          y: {
+            formatter: val => `${val.toFixed(1)} anos`
+          }
+        }
+      };
+    });
+    
   }
 }
