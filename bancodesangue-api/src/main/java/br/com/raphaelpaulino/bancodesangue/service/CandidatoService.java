@@ -134,6 +134,7 @@ public class CandidatoService {
 	    ResultadoGraficosDto resultado = new ResultadoGraficosDto();
 	    resultado.setImcMedioPorFaixaEtaria(imcPorFaixa(candidatoDtos));
 		resultado.setCandidatosPorEstado(contarPorEstado(candidatoDtos));
+		resultado.setPercentualObesosPorSexo(percentualObesidade(candidatoDtos));
 		
 	    return resultado;
 	}

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import {
   ApexAxisChartSeries,
+  ApexNonAxisChartSeries,
   ApexChart,
   ApexXAxis,
   ApexTitleSubtitle,
@@ -30,6 +31,19 @@ export type ChartOptions = {
   tooltip?: ApexTooltip;
 };
 
+export type PieChartOptions = {
+  series: ApexNonAxisChartSeries;
+  chart: ApexChart;
+  labels: string[];
+  title?: ApexTitleSubtitle;
+  dataLabels?: ApexDataLabels;
+  responsive?: ApexResponsive[];
+  legend?: ApexLegend;
+  fill?: ApexFill;
+  stroke?: ApexStroke;
+  tooltip?: ApexTooltip;
+};
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -40,6 +54,7 @@ export type ChartOptions = {
 export class DashboardComponent implements OnInit {
   public chartOptionsImc: Partial<ChartOptions> = {};
   public chartOptionsCandidatosPorEstado: Partial<ChartOptions> = {};
+  public chartOptionsPercentualObesosPorSexo: Partial<PieChartOptions> = {};
 
   constructor(private candidatosService: CandidatosService) {}
 
@@ -47,7 +62,7 @@ export class DashboardComponent implements OnInit {
     this.candidatosService.getImcPorFaixa().subscribe((dados) => {
       const imcData = dados.imcMedioPorFaixaEtaria;
       const categorias = Object.keys(imcData); // ["20-29", "30-39", ...]
-      const valores = Object.values(imcData);  // [24.75, 25.5, ...]
+      const valores = Object.values(imcData); // [24.75, 25.5, ...]
 
       this.chartOptionsImc = {
         series: [
@@ -76,8 +91,8 @@ export class DashboardComponent implements OnInit {
 
     this.candidatosService.getDistribuicaoPorEstado().subscribe((dados) => {
       const candidatosPorEstadoData = dados.candidatosPorEstado;
-      const categorias = Object.keys(candidatosPorEstadoData); // ["20-29", "30-39", ...]
-      const valores = Object.values(candidatosPorEstadoData);  // [24.75, 25.5, ...]
+      const categorias = Object.keys(candidatosPorEstadoData); // ["RR", "RS", ...]
+      const valores = Object.values(candidatosPorEstadoData); // [12, 9, ...]
 
       this.chartOptionsCandidatosPorEstado = {
         series: [
@@ -88,19 +103,44 @@ export class DashboardComponent implements OnInit {
         ],
         chart: {
           type: 'bar',
-          // height: 350,
-        },
-        title: {
-          text: 'IMC por Faixa Etária',
         },
         xaxis: {
           categories: categorias,
         },
-        plotOptions: {
-          bar: {
-            horizontal: false,
+      };
+    });
+
+    this.candidatosService.percentualObesidade().subscribe((dados) => {
+      const percentualObesosPorSexoData = dados.percentualObesosPorSexo;
+      const categorias = Object.keys(percentualObesosPorSexoData);
+      const valores = Object.values(percentualObesosPorSexoData).map((v) =>
+        parseFloat(v.toFixed(2))
+      );
+
+      this.chartOptionsPercentualObesosPorSexo = {
+        chart: {
+          type: 'pie',
+          height: 350,
+        },
+        title: {
+          text: 'Percentual de Obesos por Sexo',
+          align: 'center',
+        },
+        labels: categorias,
+        series: valores,
+        tooltip: {
+          y: {
+            formatter: (val) => `${val.toFixed(2)}%`,
           },
         },
+        dataLabels: {
+          formatter: (val: string | number | number[]) => {
+            if (typeof val === 'number') {
+              return `${val.toFixed(1)}%`;
+            }
+            return `${val}%`;
+          },
+        }
       };
     });
   }

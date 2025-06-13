@@ -30,3 +30,18 @@
   </div>
 </div>
 
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Percentual de Candidatos Obesos por Sexo</h5>
+
+    <apx-chart
+      *ngIf="chartOptionsPercentualObesosPorSexo.series"
+      [chart]="chartOptionsPercentualObesosPorSexo.chart!"
+      [title]="chartOptionsPercentualObesosPorSexo.title!"
+      [labels]="chartOptionsPercentualObesosPorSexo.labels!"
+      [series]="chartOptionsPercentualObesosPorSexo.series!"
+      [dataLabels]="chartOptionsPercentualObesosPorSexo.dataLabels!">
+    </apx-chart>
+  </div>
+</div>
+

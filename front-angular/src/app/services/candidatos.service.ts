@@ -22,4 +22,10 @@ export class CandidatosService {
       `${this.apiUrl}/api/candidatos/estatisticas-para-os-graficos`
     );
   }
+
+  percentualObesidade(): Observable<{ percentualObesosPorSexo: { [faixa: string]: number } }> {
+    return this.http.get<{ percentualObesosPorSexo: { [faixa: string]: number } }>(
+      `${this.apiUrl}/api/candidatos/estatisticas-para-os-graficos`
+    );
+  }
 }
