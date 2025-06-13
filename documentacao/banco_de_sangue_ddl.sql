@@ -4,25 +4,25 @@ COLLATE utf8mb4_unicode_ci;
 
 USE banco_de_sangue;
 
-CREATE TABLE candidatos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    cpf VARCHAR(14) NOT NULL UNIQUE,
-    rg VARCHAR(20),
-    data_nasc DATE NOT NULL,
-    sexo ENUM('Masculino', 'Feminino') NOT NULL,
-    mae VARCHAR(100),
-    pai VARCHAR(100),
-    email VARCHAR(100),
-    cep VARCHAR(9),
-    endereco VARCHAR(150),
-    numero INT,
-    bairro VARCHAR(100),
-    cidade VARCHAR(100),
-    estado CHAR(2),
-    telefone_fixo VARCHAR(20),
-    celular VARCHAR(20),
-    altura DECIMAL(4,2),
-    peso DECIMAL(5,2),
-    tipo_sanguineo ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-')
-);
+CREATE TABLE `candidatos` (
+  `id`INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `altura` double NOT NULL,
+  `data_nasc` date NOT NULL,
+  `numero` int NOT NULL,
+  `peso` double NOT NULL,
+  `bairro` varchar(255) NOT NULL,
+  `celular` varchar(255) NOT NULL,
+  `cep` varchar(255) NOT NULL,
+  `cidade` varchar(255) NOT NULL,
+  `cpf` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `endereco` varchar(255) NOT NULL,
+  `estado` varchar(255) NOT NULL,
+  `mae` varchar(255) NOT NULL,
+  `nome` varchar(255) NOT NULL,
+  `pai` varchar(255) NOT NULL,
+  `rg` varchar(255) NOT NULL,
+  `sexo` varchar(255) NOT NULL,
+  `telefone_fixo` varchar(255) NOT NULL,
+  `tipo_sanguineo` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

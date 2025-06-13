@@ -16,14 +16,26 @@ import br.com.raphaelpaulino.bancodesangue.domain.model.Candidato;
 import br.com.raphaelpaulino.bancodesangue.dto.CandidatoDto;
 import br.com.raphaelpaulino.bancodesangue.dto.ResultadoDto;
 import br.com.raphaelpaulino.bancodesangue.dto.ResultadoGraficosDto;
+import br.com.raphaelpaulino.bancodesangue.repository.CandidatoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CandidatoService {
 	
 	@PersistenceContext
 	private EntityManager manager;
+    
+    private final CandidatoRepository candidatoRepository;
+	
+    public CandidatoService(
+		EntityManager entityManager, 
+		CandidatoRepository candidatoRepository
+    ) {
+        this.manager = entityManager;
+        this.candidatoRepository = candidatoRepository;
+    }
 	
 	public ResultadoDto processar(List<CandidatoDto> candidatos) {
 		ResultadoDto resultado = new ResultadoDto();
@@ -140,4 +152,12 @@ public class CandidatoService {
 		
 	    return resultado;
 	}
+	
+    @Transactional
+    public List<Candidato> importarNovosCandidatos(List<Candidato> candidatos) {
+        manager.createNativeQuery("TRUNCATE TABLE candidatos").executeUpdate();
+
+        List<Candidato> candidatosSalvos = candidatoRepository.saveAll(candidatos);
+        return candidatosSalvos;
+    }
 }

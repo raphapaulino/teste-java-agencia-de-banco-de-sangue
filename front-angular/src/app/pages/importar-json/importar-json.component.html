@@ -8,4 +8,11 @@
 <div *ngIf="dadosImportados.length > 0">
   <h5 class="mt-4">Pré-visualização dos dados:</h5>
   <pre>{{ dadosImportados | json }}</pre>
+
+  <button class="btn btn-primary mt-3" (click)="importar()">
+    Importar Dados
+  </button>
 </div>
+
+<p *ngIf="status" class="mt-3">{{ status }}</p>
+

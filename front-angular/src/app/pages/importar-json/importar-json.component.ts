@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
+import { CandidatosService } from '../../services/candidatos.service';
 
 @Component({
   selector: 'app-importar-json',
@@ -10,6 +13,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class ImportarJsonComponent {
   dadosImportados: any[] = [];
+  status: string = '';
+
+  constructor(private http: HttpClient, private candidatosService: CandidatosService) {}
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -28,5 +34,22 @@ export class ImportarJsonComponent {
       };
       reader.readAsText(file);
     }
+  }
+
+  importar() {
+    this.status = 'Enviando dados...';
+    this.http
+      .post(`${environment.apiUrl}/api/candidatos/importar`, this.dadosImportados)
+      .subscribe({
+        next: () => {
+          this.status = 'Importação realizada com sucesso!';
+
+          this.candidatosService.recarregarEstatisticas();
+        },
+        error: (err) => {
+          console.error('Erro na importação:', err);
+          this.status = 'Erro ao importar os dados.';
+        },
+      });
   }
 }
