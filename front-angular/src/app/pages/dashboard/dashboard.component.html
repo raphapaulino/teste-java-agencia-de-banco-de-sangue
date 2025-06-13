@@ -60,3 +60,18 @@
   </div>
 </div>
 
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Doadores por Receptor (com idade de 16 a 69 anos e com peso acima de 50 Kg)</h5>
+
+    <apx-chart
+      *ngIf="chartOptionsDoadoresPorReceptor.series"
+      [series]="chartOptionsDoadoresPorReceptor.series!"
+      [chart]="chartOptionsDoadoresPorReceptor.chart!"
+      [title]="chartOptionsDoadoresPorReceptor.title!"
+      [xaxis]="chartOptionsDoadoresPorReceptor.xaxis!"
+      [plotOptions]="chartOptionsDoadoresPorReceptor.plotOptions!">
+    </apx-chart>
+  </div>
+</div>
+

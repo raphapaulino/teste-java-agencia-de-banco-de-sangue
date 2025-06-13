@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
   public chartOptionsCandidatosPorEstado: Partial<ChartOptions> = {};
   public chartOptionsPercentualObesosPorSexo: Partial<PieChartOptions> = {};
   public chartOptionsMediaIdadePorTipoSanguineo: Partial<ChartOptions> = {};
+  public chartOptionsDoadoresPorReceptor: Partial<ChartOptions> = {};
 
   constructor(private candidatosService: CandidatosService) {}
 
@@ -193,6 +194,47 @@ export class DashboardComponent implements OnInit {
         }
       };
     });
-    
+
+    this.candidatosService.getQuantidadePossiveisDoadores().subscribe((dados) => {
+      const doadoresPorReceptorData = dados.doadoresPorReceptor;
+      const tipos = Object.keys(doadoresPorReceptorData); // ["A+", "A-", ...]
+      const quantidades = Object.values(doadoresPorReceptorData); // [113, 208, ...]
+
+      this.chartOptionsDoadoresPorReceptor = {
+        series: [
+          {
+            name: 'Doadores',
+            data: quantidades,
+          },
+        ],
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        title: {
+          text: 'Doadores Possíveis por Tipo Sanguíneo Receptor',
+          align: 'center'
+        },
+        xaxis: {
+          categories: tipos,
+          title: {
+            text: 'Tipo Sanguíneo Receptor'
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'Quantidade de Doadores'
+          }
+        },
+        dataLabels: {
+          enabled: true
+        },
+        tooltip: {
+          y: {
+            formatter: val => `${val} doadores`
+          }
+        }
+      };
+    });
   }
 }

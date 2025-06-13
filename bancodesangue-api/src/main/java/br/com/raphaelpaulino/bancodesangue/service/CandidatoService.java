@@ -136,6 +136,7 @@ public class CandidatoService {
 		resultado.setCandidatosPorEstado(contarPorEstado(candidatoDtos));
 		resultado.setPercentualObesosPorSexo(percentualObesidade(candidatoDtos));
 		resultado.setMediaIdadePorTipoSanguineo(mediaIdadePorTipo(candidatoDtos));
+		resultado.setDoadoresPorReceptor(doadoresCompativeis(candidatoDtos));
 		
 	    return resultado;
 	}

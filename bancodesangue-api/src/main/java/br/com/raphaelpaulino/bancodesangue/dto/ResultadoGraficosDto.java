@@ -10,6 +10,8 @@ public class ResultadoGraficosDto {
 	private Map<String, Double> percentualObesosPorSexo;
 
 	private Map<String, Double> mediaIdadePorTipoSanguineo;
+
+	private Map<String, Integer> doadoresPorReceptor;
 	
 	public Map<String, Long> getCandidatosPorEstado() {
 		return candidatosPorEstado;
@@ -41,5 +43,13 @@ public class ResultadoGraficosDto {
 
 	public void setMediaIdadePorTipoSanguineo(Map<String, Double> mediaIdadePorTipoSanguineo) {
 		this.mediaIdadePorTipoSanguineo = mediaIdadePorTipoSanguineo;
+	}
+
+	public Map<String, Integer> getDoadoresPorReceptor() {
+		return doadoresPorReceptor;
+	}
+
+	public void setDoadoresPorReceptor(Map<String, Integer> doadoresPorReceptor) {
+		this.doadoresPorReceptor = doadoresPorReceptor;
 	}
 }
