@@ -1,9 +1,16 @@
-<h5 class="card-title">Candidatos por Estado</h5>
-<apx-chart
-  *ngIf="chartOptionsImc.series"
-  [series]="chartOptionsImc.series!"
-  [chart]="chartOptionsImc.chart!"
-  [title]="chartOptionsImc.title!"
-  [xaxis]="chartOptionsImc.xaxis!"
-  [plotOptions]="chartOptionsImc.plotOptions!">
-</apx-chart>
+<h2 class="mb-3">Dashboard</h2>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">IMC Médio por Faixa Etária dos Candidatos</h5>
+
+    <apx-chart
+      *ngIf="chartOptionsImc.series"
+      [series]="chartOptionsImc.series!"
+      [chart]="chartOptionsImc.chart!"
+      [title]="chartOptionsImc.title!"
+      [xaxis]="chartOptionsImc.xaxis!"
+      [plotOptions]="chartOptionsImc.plotOptions!">
+    </apx-chart>
+  </div>
+</div>
