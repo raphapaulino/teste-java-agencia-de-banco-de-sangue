@@ -161,7 +161,9 @@ public class CandidatoService {
 		return candidatosSalvos;
 	}
 
-	public List<Candidato> listarTodos() {
-		return candidatoRepository.findAll();
+	public List<CandidatoDto> listarTodos() {
+		return candidatoRepository.findAll().stream()
+				.map(CandidatoDto::new)
+				.toList();
 	}
 }

@@ -53,7 +53,7 @@ public class CandidatoController {
     }
 
     @GetMapping("/todos")
-    public List<Candidato> todosCandidatos() {
+    public List<CandidatoDto> todosCandidatos() {
         return service.listarTodos();
     }
 
