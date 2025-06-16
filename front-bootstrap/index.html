@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <link rel="stylesheet" href="./css/banco-de-sangue-estilos.css">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="./js/banco-de-sangue.js" defer></script>
 </head>
 
 <body>
@@ -20,13 +21,10 @@
           <a class="nav-link active" href="#dashboard">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#doadores">Doadores</a>
+          <a class="nav-link" href="/candidatos.html">Doadores</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#importar">Importar Doadores</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="candidatos.html">Todos Candidatos</a>
         </li>
       </ul>
     </nav>
@@ -39,9 +37,9 @@
       </nav>
 
       <!-- Dashboard -->
-      <div class="container mt-4" id="dashboard">
+      <div class="container mt-4">
         <h2 class="mb-3">Dashboard</h2>
-        <div class="card mb-4">
+        <div class="card mb-4" id="dashboard">
           <div class="card-body">
             <h5 class="card-title">Candidatos por Estado</h5>
             <div id="chartEstados"></div>
@@ -77,269 +75,28 @@
         </div>
       </div>
 
-      <!-- Doadores -->
-      <div class="container mt-4" id="doadores">
-        <h2 class="mb-3">Lista de Doadores</h2>
-        <div class="card">
-          <div class="card-body table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>CPF</th>
-                  <th>Data Nasc.</th>
-                  <th>Sexo</th>
-                  <th>Email</th>
-                  <th>Estado</th>
-                  <th>Tipo Sanguíneo</th>
-                </tr>
-              </thead>
-              <tbody id="tabelaDoadores">
-                <!-- Populado via JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
       <!-- Importar -->
       <div class="container mt-4" id="importar">
-        <h2 class="mb-3">Importar Doadores</h2>
-        <div class="alert alert-info">Por favor, envie um arquivo <strong>data.json</strong> contendo os dados dos doadores para que eles sejam salvos e os gráficos atualizados.</div>
-        <form id="uploadForm">
-          <input type="file" id="jsonFile" class="form-control mb-3" accept=".json" required>
-          <button class="btn btn-primary" type="submit">Enviar</button>
-        </form>
-        <div id="resultados" class="mt-3"></div>
+        <h2 class="mb-2">Importar Doadores</h2>
+
+        <div class="alert alert-info">
+          Por favor, envie um arquivo <strong>data.json</strong> contendo os dados dos doadores para que eles sejam salvos e os gráficos atualizados.
+        </div>
+        
+        <div class="mb-5">
+          <label for="jsonFile" class="form-label">Selecione o arquivo JSON:</label>
+
+          <form id="uploadForm">
+            <input type="file" id="jsonFile" class="form-control mb-3" accept=".json" required>
+            <button class="btn btn-primary" type="submit">Enviar</button>
+          </form>
+
+          <div id="resultados" class="mt-3"></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <script>
-    const doadores = [];
-
-    document.getElementById('uploadForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const file = document.getElementById('jsonFile').files[0];
-      const text = await file.text();
-      const json = JSON.parse(text);
-
-      const resp = await fetch('http://localhost:8080/api/candidatos/processar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(json)
-      });
-
-      const data = await resp.json();
-      document.getElementById('resultados').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-
-      if (Array.isArray(json)) {
-        doadores.length = 0;
-        doadores.push(...json);
-        renderTabela();
-      }
-
-      if (data.candidatosPorEstado) {
-        renderGrafico(data.candidatosPorEstado);
-      }
-
-      if (data.imcMedioPorFaixaEtaria) {
-        renderGraficoImcFaixaEtaria(data.imcMedioPorFaixaEtaria);
-      }
-
-      if (data.percentualObesosPorSexo) {
-        renderGraficoObesosPorSexo(data.percentualObesosPorSexo);
-      }
-
-      if (data.mediaIdadePorTipoSanguineo) {
-        renderGraficoIdadePorTipoSanguineo(data.mediaIdadePorTipoSanguineo);
-      }
-      
-      if (data.doadoresPorReceptor) {
-        renderGraficoDoadoresPorReceptor(data.doadoresPorReceptor);
-      }
-    });
-
-    function renderGrafico(estados) {
-      const options = {
-        chart: { type: 'bar' },
-        series: [{
-          name: 'Candidatos',
-          data: Object.values(estados)
-        }],
-        xaxis: {
-          categories: Object.keys(estados)
-        }
-      };
-      new ApexCharts(document.querySelector("#chartEstados"), options).render();
-    }
-
-    function renderGraficoImcFaixaEtaria(imcs) {
-      const options = {
-        chart: {
-          type: 'bar',
-          height: 350
-        },
-        title: {
-          text: 'IMC Médio por Faixa Etária',
-          align: 'center'
-        },
-        series: [{
-          name: 'IMC Médio',
-          data: Object.values(imcs)
-        }],
-        xaxis: {
-          categories: Object.keys(imcs),
-          title: {
-            text: 'Faixa Etária'
-          }
-        },
-        yaxis: {
-          title: {
-            text: 'IMC'
-          },
-          min: 0
-        },
-        tooltip: {
-          y: {
-            formatter: val => val.toFixed(2)
-          }
-        },
-        dataLabels: {
-          enabled: true,
-          formatter: val => val.toFixed(2)
-        }
-      };
-      new ApexCharts(document.querySelector("#chartImcFaixa"), options).render();
-    }
-
-    function renderGraficoObesosPorSexo(obesos) {
-      const categorias = Object.keys(obesos);
-      const valores = Object.values(obesos).map(v => parseFloat(v.toFixed(2)));
-
-      const options = {
-        chart: {
-          type: 'pie',
-          height: 350
-        },
-        title: {
-          text: 'Percentual de Obesos por Sexo',
-          align: 'center'
-        },
-        labels: categorias,
-        series: valores,
-        tooltip: {
-          y: {
-            formatter: val => `${val.toFixed(2)}%`
-          }
-        },
-        dataLabels: {
-          formatter: val => `${val.toFixed(1)}%`
-        }
-      };
-
-      new ApexCharts(document.querySelector("#chartObesosSexo"), options).render();
-    }
-
-    function renderGraficoIdadePorTipoSanguineo(dados) {
-      const tipos = Object.keys(dados);
-      const idades = Object.values(dados).map(v => parseFloat(v.toFixed(1)));
-
-      const options = {
-        chart: {
-          type: 'bar',
-          height: 350
-        },
-        title: {
-          text: 'Média de Idade por Tipo Sanguíneo',
-          align: 'center'
-        },
-        series: [{
-          name: 'Média de Idade',
-          data: idades
-        }],
-        xaxis: {
-          categories: tipos,
-          title: {
-            text: 'Tipo Sanguíneo'
-          }
-        },
-        yaxis: {
-          title: {
-            text: 'Idade (anos)'
-          }
-        },
-        dataLabels: {
-          enabled: true,
-          formatter: val => `${val.toFixed(1)}`
-        },
-        tooltip: {
-          y: {
-            formatter: val => `${val.toFixed(1)} anos`
-          }
-        }
-      };
-
-      new ApexCharts(document.querySelector("#chartIdadeTipoSanguineo"), options).render();
-    }
-
-    function renderGraficoDoadoresPorReceptor(dados) {
-      const tipos = Object.keys(dados);
-      const quantidades = Object.values(dados);
-
-      const options = {
-        chart: {
-          type: 'bar',
-          height: 350
-        },
-        title: {
-          text: 'Doadores Possíveis por Tipo Sanguíneo Receptor',
-          align: 'center'
-        },
-        series: [{
-          name: 'Doadores',
-          data: quantidades
-        }],
-        xaxis: {
-          categories: tipos,
-          title: {
-            text: 'Tipo Sanguíneo Receptor'
-          }
-        },
-        yaxis: {
-          title: {
-            text: 'Quantidade de Doadores'
-          }
-        },
-        dataLabels: {
-          enabled: true
-        },
-        tooltip: {
-          y: {
-            formatter: val => `${val} doadores`
-          }
-        }
-      };
-
-      new ApexCharts(document.querySelector("#chartDoadoresPorReceptor"), options).render();
-    }
-
-
-    function renderTabela() {
-      const tbody = document.getElementById('tabelaDoadores');
-      tbody.innerHTML = doadores.map(d => `
-        <tr>
-          <td>${d.nome}</td>
-          <td>${d.cpf}</td>
-          <td>${d.data_nasc}</td>
-          <td>${d.sexo}</td>
-          <td>${d.email}</td>
-          <td>${d.estado}</td>
-          <td>${d.tipo_sanguineo}</td>
-        </tr>
-      `).join('');
-    }
-  </script>
 </body>
 
 </html>
