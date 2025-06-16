@@ -183,6 +183,8 @@ Utilizar o arquivo `application-production-template.properties` renomeando-o par
 
 Para o ambiente de desenvolvimento, o Hibernate irá checar se já existe o banco de dados de nome `banco_de_sangue`, se não existir ele irá criar automaticamente para nós juntamente com a tabela `candidatos` devido ao mapeamento da entidade `Candidato.java` explicado anteriormente.
 
+Para visualização das queries em tempo de execução, adicionei a configuração `spring.jpa.show-sql=true` no arquivo de profile de desenvolvimento.
+
 
 ### Links úteis:
 
