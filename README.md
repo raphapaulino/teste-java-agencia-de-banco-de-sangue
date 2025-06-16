@@ -185,6 +185,21 @@ Para o ambiente de desenvolvimento, o Hibernate irá checar se já existe o banc
 
 Para visualização das queries em tempo de execução, adicionei a configuração `spring.jpa.show-sql=true` no arquivo de profile de desenvolvimento.
 
+#### O programa
+
+Se por algum motivo a compilação do meu projeto não der certo na sua máquina, não quiser meu suporte para avaliação do que está acontecendo e ainda assim gostaria de ver o resultado final, não se desespere.
+
+Se certificando de que atendeu os pré-requisitos mencionados nesta documentação, é possível executar meu programa através do arquivo .jar que gerei (em ambiente Linux com Ubuntu 20.04) que irá encontrar no diretório:
+
+```
+cd /seu/diretorio/de/instalacao/teste-java-agencia-de-banco-de-sangue/documentacao
+```
+
+E execute-o:
+
+```
+java -jar bancodesangue-api-0.0.1-SNAPSHOT.jar --port=8080
+```
 
 ### Links úteis:
 
