@@ -1,0 +1,32 @@
+<!-- src/app/components/candidato/candidato.component.html -->
+<div class="container mt-4" id="doadores">
+  <h2 class="mb-3">Lista de Doadores</h2>
+  <div class="card">
+    <div class="card-body table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Data Nasc.</th>
+            <th>Sexo</th>
+            <th>Email</th>
+            <th>Estado</th>
+            <th>Tipo Sanguíneo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of candidatos">
+            <td>{{ d.nome }}</td>
+            <td>{{ d.cpf }}</td>
+            <td>{{ d.data_nasc }}</td>
+            <td>{{ d.sexo }}</td>
+            <td>{{ d.email }}</td>
+            <td>{{ d.estado }}</td>
+            <td>{{ d.tipo_sanguineo }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

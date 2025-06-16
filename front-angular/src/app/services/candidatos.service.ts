@@ -4,6 +4,16 @@ import { map, Observable, shareReplay } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { EstatisticasCandidatos } from '../pages/dashboard/estatisticas-candidatos.model';
 
+export interface Candidato {
+  nome: string;
+  cpf: string;
+  data_nasc: string;
+  sexo: string;
+  email: string;
+  estado: string;
+  tipo_sanguineo: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -45,5 +55,9 @@ export class CandidatosService {
 
   recarregarEstatisticas() {
     this.estatisticas$ = undefined as any;
+  }
+
+  getTodos(): Observable<Candidato[]> {
+    return this.http.get<Candidato[]>(`${this.apiUrl}/api/candidatos/todos`);
   }
 }

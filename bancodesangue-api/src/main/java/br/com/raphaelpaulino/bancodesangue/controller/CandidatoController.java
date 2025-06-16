@@ -16,7 +16,6 @@ import br.com.raphaelpaulino.bancodesangue.domain.model.Candidato;
 import br.com.raphaelpaulino.bancodesangue.dto.CandidatoDto;
 import br.com.raphaelpaulino.bancodesangue.dto.ResultadoDto;
 import br.com.raphaelpaulino.bancodesangue.dto.ResultadoGraficosDto;
-import br.com.raphaelpaulino.bancodesangue.repository.CandidatoRepository;
 import br.com.raphaelpaulino.bancodesangue.service.CandidatoService;
 import jakarta.validation.Valid;
 
@@ -26,11 +25,11 @@ public class CandidatoController {
 
     @Autowired
     private final CandidatoService service;
-    
+
     public CandidatoController(CandidatoService candidatoService) {
         this.service = candidatoService;
     }
-    
+
     @PostMapping("/processar") // front-bootstrap
     @ResponseStatus(HttpStatus.CREATED)
     public ResultadoDto processar(@RequestBody @Valid List<@Valid CandidatoDto> candidatos) {
@@ -42,15 +41,20 @@ public class CandidatoController {
     public ResultadoGraficosDto processarGraficos() {
         return service.buscarTodos();
     }
-    
+
     @PostMapping("/importar") // front-angular
     public ResponseEntity<?> importarCandidatos(@RequestBody List<CandidatoDto> candidatosDto) {
         List<Candidato> candidatos = candidatosDto.stream()
-            .map(CandidatoDto::toEntity)
-            .toList();
+                .map(CandidatoDto::toEntity)
+                .toList();
 
         List<Candidato> salvos = service.importarNovosCandidatos(candidatos);
         return ResponseEntity.ok(salvos);
+    }
+
+    @GetMapping("/todos")
+    public List<CandidatoDto> todosCandidatos() {
+        return service.listarTodos();
     }
 
 }
