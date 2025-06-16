@@ -22,6 +22,7 @@ export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   xaxis: ApexXAxis;
+  yaxis: ApexYAxis;
   title: ApexTitleSubtitle;
   plotOptions?: ApexPlotOptions;
   dataLabels?: ApexDataLabels;
@@ -30,7 +31,6 @@ export type ChartOptions = {
   fill?: ApexFill;
   stroke?: ApexStroke;
   tooltip?: ApexTooltip;
-  yaxis?: ApexYAxis;
 };
 
 export type PieChartOptions = {
@@ -71,7 +71,7 @@ export class DashboardComponent implements OnInit {
       this.chartOptionsImc = {
         series: [
           {
-            name: 'Média IMC',
+            name: 'IMC Médio',
             data: valores,
           },
         ],
@@ -80,10 +80,26 @@ export class DashboardComponent implements OnInit {
           height: 350,
         },
         title: {
-          text: 'IMC por Faixa Etária',
+          text: 'IMC Médio por Faixa Etária',
+          align: 'center'
         },
         xaxis: {
           categories: categorias,
+          title: {
+            text: 'Faixa Etária'
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'IMC',
+            // align: 'center',
+            style: {
+              fontSize: '12px',
+              fontWeight: 'bold',
+              color: '#263238'
+            }
+          },
+          min: 0
         },
         plotOptions: {
           bar: {
@@ -110,7 +126,21 @@ export class DashboardComponent implements OnInit {
         },
         xaxis: {
           categories: categorias,
+          title: {
+            text: 'Estados'
+          }
         },
+        yaxis: {
+          title: {
+            text: 'Candidatos (quantidade)',
+            style: {
+              fontSize: '12px',
+              fontWeight: 'bold',
+              color: '#263238'
+            }
+          },
+          min: 0
+        }
       };
     });
 
